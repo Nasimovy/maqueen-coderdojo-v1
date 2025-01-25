@@ -26,6 +26,20 @@ function rechts_om () {
     basic.pause(1000)
     maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
 }
+function haaks_zetten () {
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 20)
+    while (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorL2) > 100 || maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorR2) > 100) {
+        if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorL2) < 100) {
+            maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.LeftMotor)
+            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.RightMotor, maqueenPlusV2.MyEnumDir.Forward, 20)
+        } else if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorR2) < 100) {
+            maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.RightMotor)
+            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.LeftMotor, maqueenPlusV2.MyEnumDir.Forward, 20)
+        } else {
+            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 20)
+        }
+    }
+}
 function avoid_object () {
     maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.LeftMotor, maqueenPlusV2.MyEnumDir.Forward, 100)
 }
@@ -63,33 +77,17 @@ basic.forever(function () {
         while (samplesfound <= samples) {
             if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorM) < 100) {
                 music.setBuiltInSpeakerEnabled(true)
-                music.play(music.tonePlayable(262, music.beat(BeatFraction.Double)), music.PlaybackMode.InBackground)
+                music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
                 if (row % 2 == 0) {
                     rechts_om()
                     row += 1
-                    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                    while (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorL2) > 100 || maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorR2) > 100) {
-                        if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorL2) < 100) {
-                            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.RightMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                        } else if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorR2) < 100) {
-                            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.LeftMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                        } else {
-                            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                        }
-                    }
+                    music.play(music.tonePlayable(988, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
+                    haaks_zetten()
                 } else {
                     links_om()
                     row += 1
-                    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                    while (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorL2) > 100 || maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorR2) > 100) {
-                        if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorL2) < 100) {
-                            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.RightMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                        } else if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorR2) < 100) {
-                            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.LeftMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                        } else {
-                            maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
-                        }
-                    }
+                    music.play(music.tonePlayable(988, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
+                    haaks_zetten()
                 }
             } else if (false) {
             	
@@ -98,7 +96,7 @@ basic.forever(function () {
             } else if (false) {
             	
             } else {
-                maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
+                maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 20)
             }
         }
         maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
