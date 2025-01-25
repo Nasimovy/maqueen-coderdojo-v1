@@ -95,12 +95,11 @@ basic.forever(function () {
     while (input.buttonIsPressed(Button.B)) {
         huskylens.clearOSD()
         while (samplesfound < samples) {
-            huskylens.request()
             if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorM) < 100) {
                 music.setBuiltInSpeakerEnabled(true)
                 music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
                 maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
-                basic.pause(1000)
+                basic.pause(200)
                 maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
                 while (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorL2) > 100 && maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorR2) > 100) {
                     if (row % 2 == 0) {
@@ -119,7 +118,7 @@ basic.forever(function () {
                 avoid_object()
                 samplesfound += 1
             } else {
-                maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 30)
+                maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
             }
         }
         maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
