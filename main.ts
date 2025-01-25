@@ -41,9 +41,28 @@ function haaks_zetten () {
     }
 }
 function avoid_object () {
-    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.LeftMotor, maqueenPlusV2.MyEnumDir.Forward, 100)
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.RightMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
+    basic.pause(1000)
+    maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
+    basic.pause(200)
+    maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.LeftMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
+    basic.pause(1000)
+    maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
+    basic.pause(2000)
+    maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.LeftMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
+    basic.pause(1000)
+    maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
+    basic.pause(200)
+    maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
+    maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.RightMotor, maqueenPlusV2.MyEnumDir.Forward, 40)
+    basic.pause(1000)
+    maqueenPlusV2.controlMotorStop(maqueenPlusV2.MyEnumMotor.AllMotor)
 }
-let row = 0
 huskylens.initI2c()
 maqueenPlusV2.I2CInit()
 huskylens.initMode(protocolAlgorithm.ALGORITHM_COLOR_RECOGNITION)
@@ -53,6 +72,7 @@ radio.setGroup(1)
 let samples = 1
 let samplesfound = 0
 let samplesmax = 8
+let row = 1
 huskylens.writeOSD("druk op A om het ", 0, 0)
 huskylens.writeOSD("aantal samples ", 164, 0)
 huskylens.writeOSD("te definieren", 0, 30)
@@ -74,27 +94,26 @@ basic.forever(function () {
         }
     }
     while (input.buttonIsPressed(Button.B)) {
-        while (samplesfound <= samples) {
+        huskylens.clearOSD()
+        while (samplesfound < samples) {
+            huskylens.request()
             if (maqueenPlusV2.readLineSensorData(maqueenPlusV2.MyEnumLineSensor.SensorM) < 100) {
                 music.setBuiltInSpeakerEnabled(true)
                 music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
                 if (row % 2 == 0) {
-                    rechts_om()
-                    row += 1
-                    music.play(music.tonePlayable(988, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
-                    haaks_zetten()
-                } else {
                     links_om()
                     row += 1
                     music.play(music.tonePlayable(988, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
                     haaks_zetten()
+                } else {
+                    rechts_om()
+                    row += 1
+                    music.play(music.tonePlayable(988, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
+                    haaks_zetten()
                 }
-            } else if (false) {
-            	
-            } else if (false) {
-            	
-            } else if (false) {
-            	
+            } else if (huskylens.readeBox(1, Content1.yCenter) > 150 && (huskylens.readeBox(1, Content1.xCenter) > 90 && huskylens.readeBox(1, Content1.xCenter) < 220)) {
+                avoid_object()
+                samplesfound += 1
             } else {
                 maqueenPlusV2.controlMotor(maqueenPlusV2.MyEnumMotor.AllMotor, maqueenPlusV2.MyEnumDir.Forward, 20)
             }
